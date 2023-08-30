@@ -1,0 +1,68 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: vtand-poi-gateway-app-dev
+  annotations:
+    argocd/app-name: vtand-poi-gateway-app-dev
+    backstage.io/kubernetes-id: vtand-poi-gateway-app
+    backstage.io/kubernetes-namespace: vtand
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: rhdh-deploy/vtand-gateway
+    janus-idp.io/tekton-enabled: 'true'
+  tags:
+    - java
+    - quarkus
+    - maven
+    - workshop
+  links:
+    - url: https://console-openshift-console.apps.a1jxqhzp.eastus2.aroapp.io/dev-pipelines/ns/vtand/
+      title: Pipelines
+      icon: web
+    - url: https://console-openshift-console.apps.a1jxqhzp.eastus2.aroapp.io/k8s/ns/vtand/deployments/vtand-poi-gateway-app
+      title: Deployment
+      icon: web
+    - url: https://devspaces.apps.a1jxqhzp.eastus2.aroapp.io/#https://github.com/rhdh-deploy/vtand-gateway?che-editor=che-incubator/che-code/latest&devfilePath=.devfile-vscode.yaml
+      title: OpenShift Dev Spaces (VS Code)
+      icon: web
+spec:
+  type: service
+  lifecycle: production
+  owner: "vtand"
+  system: workshop-system-vtand
+  providesApis:
+    - gateway-api-vtand
+  consumesApis:
+    - backend-api-vtand
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: workshop-system-vtand
+  tags:
+    - backstage
+    - janus-idp
+    - openshift
+    - workshop
+    - rh-summit
+spec:
+  owner: "vtand"
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: gateway-api-vtand
+  description: API surface exposed to interact with Backends (summit POIs + parks data) via the Gateway
+  links:
+    - url: http://vtand-poi-gateway-app-vtand.apps.a1jxqhzp.eastus2.aroapp.io/q/swagger-ui
+      title: Swagger UI
+      icon: web
+    - url: https://github.com/rhdh-deploy/vtand-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
+      title: API Spec
+      icon: code
+spec:
+  type: openapi
+  lifecycle: production
+  owner: "vtand"
+  system: workshop-system-vtand
+  definition:
+    $text: https://github.com/rhdh-deploy/vtand-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
